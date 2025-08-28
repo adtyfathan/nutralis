@@ -73,4 +73,15 @@ dependencies {
     implementation(libs.converter.gson)
     // Coil display online image
     implementation(libs.coil.compose)
+
+    // ML Kit Scan Barcode
+    implementation(libs.barcode.scanning)
+
+    // CameraX
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.extensions)
 }

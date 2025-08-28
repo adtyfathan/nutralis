@@ -25,8 +25,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.nutralis.navigation.Screen
+import com.example.nutralis.ui.home.HomeScreen
 import com.example.nutralis.ui.product.ProductInputScreen
 import com.example.nutralis.ui.product.ProductResultScreen
+import com.example.nutralis.ui.product.ProductScanScreen
 import com.example.nutralis.ui.theme.NutralisTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,7 +41,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NutralisTheme {
                 val navController = rememberNavController()
-                val bottomScreen = listOf(Screen.Input)
+                val bottomScreen = listOf(Screen.Home, Screen.Scan, Screen.Input)
 
                 Scaffold(
                     topBar = {
@@ -68,7 +70,7 @@ class MainActivity : ComponentActivity() {
                                     label = { Text(screen.label) },
                                     selected = currentRoute.startsWith(screen.route.removeSuffix("/{barcode}")),
                                     onClick = {
-                                        navController.navigate(Screen.Input.route) {
+                                        navController.navigate(screen.route) {
                                             popUpTo(navController.graph.findStartDestination().id) {
                                                 inclusive = false
                                             }
@@ -83,9 +85,19 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.Input.route,
+                        startDestination = Screen.Home.route,
                         modifier = Modifier.padding(innerPadding)
                     ) {
+                        composable(Screen.Home.route){
+                            HomeScreen()
+                        }
+
+                        composable(Screen.Scan.route){
+                            ProductScanScreen(onBarcodeScanned = { barcode ->
+                                navController.navigate(Screen.Result.createRoute(barcode))
+                            })
+                        }
+
                         composable(Screen.Input.route){
                             ProductInputScreen(onSubmit = { barcode ->
                                 navController.navigate(Screen.Result.createRoute(barcode))
