@@ -16,4 +16,5 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector?
     object Result : Screen("product_result/{barcode}", "Result"){
         fun createRoute(barcode: String) = "product_result/$barcode"
     }
+    object Scanned : Screen("scanned_product", "Scanned", Icons.Default.Menu)
 }

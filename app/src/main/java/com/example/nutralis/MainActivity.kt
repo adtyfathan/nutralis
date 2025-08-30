@@ -39,6 +39,7 @@ import com.example.nutralis.ui.home.HomeScreen
 import com.example.nutralis.ui.product.ProductInputScreen
 import com.example.nutralis.ui.product.ProductResultScreen
 import com.example.nutralis.ui.product.ProductScanScreen
+import com.example.nutralis.ui.product.ScannedProductScreen
 import com.example.nutralis.ui.theme.NutralisTheme
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +53,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NutralisTheme {
                 val navController = rememberNavController()
-                val bottomScreen = listOf(Screen.Home, Screen.Scan, Screen.Input)
+                val bottomScreen = listOf(Screen.Home, Screen.Scan, Screen.Input, Screen.Scanned)
                 val auth = FirebaseAuth.getInstance()
                 val authViewModel: AuthViewModel = hiltViewModel()
 
@@ -167,6 +168,10 @@ class MainActivity : ComponentActivity() {
                         ) { backStackEntry ->
                             val barcode = backStackEntry.arguments?.getString("barcode") ?: ""
                             ProductResultScreen(barcode = barcode)
+                        }
+
+                        composable(Screen.Scanned.route){
+                            ScannedProductScreen(navController = navController)
                         }
                     }
                 }

@@ -5,6 +5,7 @@ cameraCore = "1.4.2"
 coilCompose = "2.7.0"
 converterScalars = "3.0.0"
 firebaseBom = "34.1.0"
+firebaseBomVersion = "34.2.0"
 gson = "2.13.1"
 hiltAndroid = "2.57.1"
 hiltNavigationCompose = "1.2.0"
@@ -37,6 +38,8 @@ converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", versi
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-bom-v3420 = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }

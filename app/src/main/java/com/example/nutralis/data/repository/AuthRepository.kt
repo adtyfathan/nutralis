@@ -1,4 +1,4 @@
-package com.example.nutralis.data
+package com.example.nutralis.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await

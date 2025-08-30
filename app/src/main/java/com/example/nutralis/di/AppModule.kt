@@ -1,9 +1,11 @@
 package com.example.nutralis.di
 
-import com.example.nutralis.data.AuthRepository
+import com.example.nutralis.data.repository.AuthRepository
 import com.example.nutralis.data.remote.ApiService
-import com.example.nutralis.data.remote.ProductRepository
+import com.example.nutralis.data.repository.ProductRepository
+import com.example.nutralis.data.repository.ScannedProductRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,6 +34,15 @@ object AppModule {
     @Singleton
     fun provideProductRepository(api: ApiService): ProductRepository =
         ProductRepository(api)
+
+    @Provides
+    @Singleton
+    fun provideFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideScannedProductRepository(firestore: FirebaseFirestore): ScannedProductRepository =
+        ScannedProductRepository(firestore)
 
     @Provides
     @Singleton

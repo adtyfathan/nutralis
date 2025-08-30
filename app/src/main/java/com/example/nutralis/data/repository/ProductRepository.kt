@@ -1,5 +1,7 @@
-package com.example.nutralis.data.remote
+package com.example.nutralis.data.repository
 
+import com.example.nutralis.data.remote.ApiService
+import com.example.nutralis.data.remote.ProductResponse
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(
