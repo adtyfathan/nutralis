@@ -39,7 +39,7 @@ fun ScannedProductScreen(
                 CircularProgressIndicator()
             }
             products.isEmpty() -> {
-                Text("There is no product scanned yet.")
+                Text("Belum ada produk")
             }
             else -> {
                 LazyColumn(

@@ -35,10 +35,10 @@ class AuthViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun register(email: String, password: String){
+    fun register(email: String, password: String, username: String){
         _uiState.value = AuthUiState(isLoading = true)
         viewModelScope.launch {
-            val result = repository.register(email, password)
+            val result = repository.register(email, password, username)
             _uiState.value = if (result.isSuccess){
                 AuthUiState(isSuccess = true)
             } else {

@@ -93,4 +93,7 @@ dependencies {
     implementation(libs.firebase.auth)
 
     implementation(libs.firebase.firestore)
+
+    // Icon
+    implementation(libs.androidx.material)
 }

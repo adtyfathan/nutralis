@@ -12,9 +12,10 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector?
     object Register : Screen("register", "Register")
     object Home : Screen("home", "Home", Icons.Default.Home)
     object Scan : Screen("product_scan", "Scan", Icons.Default.AddCircle)
-    object Input : Screen("product_input", "Search", Icons.Default.Search)
+    object Input : Screen("product_input", "Search")
     object Result : Screen("product_result/{barcode}", "Result"){
         fun createRoute(barcode: String) = "product_result/$barcode"
     }
     object Scanned : Screen("scanned_product", "Scanned", Icons.Default.Menu)
+    object Profile : Screen("profile", "Profile")
 }

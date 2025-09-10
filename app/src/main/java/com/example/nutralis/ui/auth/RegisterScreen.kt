@@ -46,6 +46,7 @@ fun RegisterScreen(
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -138,8 +139,35 @@ fun RegisterScreen(
                 )
             )
 
+            TextField(
+                value = username,
+                onValueChange = { username = it },
+                label = { Text("Username") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 4.dp,
+                        bottom = 8.dp
+                    )
+                    .defaultMinSize(minHeight = 36.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedLabelColor = Color.Gray,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent
+                ),
+                textStyle = TextStyle(
+                    color = Color.Black,
+                    fontSize = 13.sp
+                )
+            )
+
             Button(
-                onClick = { viewModel.register(email, password) },
+                onClick = { viewModel.register(email, password, username) },
                 enabled = !state.isLoading,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF1D61E7),
