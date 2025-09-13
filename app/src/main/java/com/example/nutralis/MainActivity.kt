@@ -27,8 +27,8 @@ class MainActivity : ComponentActivity() {
                 val user by authViewModel.currentUser.collectAsState()
 
                 when (user) {
-                    null -> GuestNavGraph(authViewModel)
-                    else -> MainNavGraph(authViewModel)
+                    null -> GuestNavGraph(authViewModel = authViewModel)
+                    else -> MainNavGraph(authViewModel = authViewModel)
                 }
             }
         }

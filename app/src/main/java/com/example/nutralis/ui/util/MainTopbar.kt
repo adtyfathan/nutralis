@@ -32,8 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.nutralis.navigation.Screen
-import com.example.nutralis.ui.profile.ProfileViewModel
-import com.example.nutralis.R
+import com.example.nutralis.ui.auth.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,21 +40,10 @@ fun MainTopbar(
     currentRoute: String,
     navController: NavController,
     onProfileClick: () -> Unit,
-    profileViewModel: ProfileViewModel
+    authViewModel: AuthViewModel,
 ){
-    val user by profileViewModel.user.collectAsState()
-    val isLoading by profileViewModel.isLoading.collectAsState()
-
-    fun getUserAvatar(): Int {
-        return when (user?.avatar) {
-            "avatar1" -> R.drawable.avatar1
-            "avatar2" -> R.drawable.avatar2
-            "avatar3" -> R.drawable.avatar3
-            "avatar4" -> R.drawable.avatar4
-            "avatar5" -> R.drawable.avatar5
-            else -> R.drawable.avatar1
-        }
-    }
+    val user by authViewModel.userData.collectAsState()
+    val state by authViewModel.uiState.collectAsState()
 
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -90,11 +78,11 @@ fun MainTopbar(
             }
         },
         actions = {
-            if (isLoading) {
+            if (state.isLoading) {
                 CircularProgressIndicator()
             } else {
                 Image(
-                    painter = painterResource(id = getUserAvatar()),
+                    painter = painterResource(id = authViewModel.getAvatarResource(user?.avatar)),
                     contentDescription = "User Avatar",
                     modifier = Modifier
                         .size(44.dp)

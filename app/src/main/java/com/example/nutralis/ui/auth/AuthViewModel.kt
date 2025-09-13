@@ -2,8 +2,9 @@ package com.example.nutralis.ui.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.nutralis.R
+import com.example.nutralis.data.model.User
 import com.example.nutralis.data.repository.AuthRepository
-import com.example.nutralis.ui.profile.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,14 +28,32 @@ class AuthViewModel @Inject constructor(
     private val _currentUser = MutableStateFlow(firebaseAuth.currentUser)
     val currentUser: StateFlow<FirebaseUser?> = _currentUser
 
+    private val _uiState = MutableStateFlow(AuthUiState())
+    val uiState = _uiState.asStateFlow()
+
+    private val _userData = MutableStateFlow<User?>(null)
+    val userData: StateFlow<User?> = _userData
+
+    private val _showAvatarPicker = MutableStateFlow<Boolean>(false)
+    val showAvatarPicker: StateFlow<Boolean> = _showAvatarPicker
+
     init {
         firebaseAuth.addAuthStateListener { auth ->
             _currentUser.value = auth.currentUser
+            if (auth.currentUser != null) {
+                viewModelScope.launch {
+                    _uiState.value = AuthUiState(isLoading = true)
+                    val result = repository.getUserData()
+                    _userData.value = result.getOrNull()
+                    _uiState.value = AuthUiState(isLoading = false)
+                }
+            } else {
+                _userData.value = null
+                _uiState.value = AuthUiState(isLoading = false)
+            }
         }
     }
 
-    private val _uiState = MutableStateFlow(AuthUiState())
-    val uiState = _uiState.asStateFlow()
 
     fun register(email: String, password: String, username: String){
         _uiState.value = AuthUiState(isLoading = true)
@@ -60,7 +79,57 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun logout() = repository.logout()
+    fun updateUser(username: String, avatar: String){
+        viewModelScope.launch {
+            _uiState.value = AuthUiState(
+                error = null,
+                isLoading = true
+            )
+            repository.updateUserData(username, avatar)
+                .onSuccess {
+                    _userData.value = _userData.value?.copy(
+                        username = username,
+                        avatar = avatar
+                    )
+                }
+                .onFailure { _uiState.value = AuthUiState(error = it.message) }
+            _uiState.value = AuthUiState(isLoading = false)
+        }
+    }
 
-    fun userIsLoggedIn(): Boolean = repository.isUserLoggedIn()
+    fun deleteUser(onDeleted: () -> Unit) {
+        viewModelScope.launch {
+            _uiState.value = AuthUiState(isLoading = true)
+            val result = repository.deleteUserData()
+            result.onSuccess {
+                _userData.value = null
+                onDeleted()
+            }.onFailure { _uiState.value = AuthUiState(error = it.message) }
+            _uiState.value = AuthUiState(isLoading = false)
+        }
+    }
+
+    fun logout(){
+        repository.logout()
+        _userData.value = null
+    }
+
+    fun getAvatarResource(avatar: String?): Int {
+        return when (avatar) {
+            "avatar1" -> R.drawable.avatar1
+            "avatar2" -> R.drawable.avatar2
+            "avatar3" -> R.drawable.avatar3
+            "avatar4" -> R.drawable.avatar4
+            "avatar5" -> R.drawable.avatar5
+            else -> R.drawable.avatar1
+        }
+    }
+
+    fun openAvatarPicker() {
+        _showAvatarPicker.value = true
+    }
+
+    fun closeAvatarPicker() {
+        _showAvatarPicker.value = false
+    }
 }

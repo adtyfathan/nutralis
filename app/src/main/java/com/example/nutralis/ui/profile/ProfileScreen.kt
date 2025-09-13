@@ -45,16 +45,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.nutralis.ui.auth.AuthViewModel
 
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel,
-    onDeleted: () -> Unit
+    onDeleted: () -> Unit,
+    authViewModel: AuthViewModel
 ){
-    val user by viewModel.user.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val error by viewModel.error.collectAsState()
-    val showAvatarPicker by viewModel.showAvatarPicker.collectAsState()
+    val user by authViewModel.userData.collectAsState()
+    val state by authViewModel.uiState.collectAsState()
+    val showAvatarPicker by authViewModel.showAvatarPicker.collectAsState()
 
     var newUsername by remember { mutableStateOf("") }
     var tempAvatar by remember { mutableStateOf("") }
@@ -64,7 +64,6 @@ fun ProfileScreen(
             newUsername = it.username
             tempAvatar = it.avatar
         }
-
     }
 
     Box(
@@ -73,15 +72,15 @@ fun ProfileScreen(
             .padding(16.dp)
     ){
         when {
-            isLoading -> {
+            state.isLoading -> {
                 CircularProgressIndicator()
             }
-            error != null -> {
-                Text("Error: $error")
+            state.error != null -> {
+                Text("Error: ${state.error}")
             }
             user != null -> {
                 if (showAvatarPicker) {
-                    Dialog(onDismissRequest = { viewModel.closeAvatarPicker() }) {
+                    Dialog(onDismissRequest = { authViewModel.closeAvatarPicker() }) {
                         Surface(
                             shape = RoundedCornerShape(16.dp),
                             tonalElevation = 8.dp,
@@ -131,7 +130,7 @@ fun ProfileScreen(
                                                 .clickable { tempAvatar = avatar }
                                         ) {
                                             Image(
-                                                painter = painterResource(id = viewModel.getAvatarResource(avatar)),
+                                                painter = painterResource(id = authViewModel.getAvatarResource(avatar)),
                                                 contentDescription = avatar,
                                                 contentScale = ContentScale.Crop,
                                                 modifier = Modifier.size(70.dp).clip(CircleShape)
@@ -147,12 +146,12 @@ fun ProfileScreen(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.End
                                 ) {
-                                    TextButton(onClick = { viewModel.closeAvatarPicker() }) {
+                                    TextButton(onClick = { authViewModel.closeAvatarPicker() }) {
                                         Text("Cancel")
                                     }
                                     Spacer(Modifier.width(8.dp))
                                     Button(onClick = {
-                                        viewModel.closeAvatarPicker()
+                                        authViewModel.closeAvatarPicker()
                                     }) {
                                         Text("Select")
                                     }
@@ -171,12 +170,12 @@ fun ProfileScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
-                        painter = painterResource(id = viewModel.getAvatarResource(tempAvatar)),
+                        painter = painterResource(id = authViewModel.getAvatarResource(tempAvatar)),
                         contentDescription = "User Avatar",
                         modifier = Modifier
                             .size(148.dp)
                             .clip(CircleShape)
-                            .clickable { viewModel.openAvatarPicker() },
+                            .clickable { authViewModel.openAvatarPicker() },
                         contentScale = ContentScale.Crop
                     )
 
@@ -195,7 +194,7 @@ fun ProfileScreen(
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFa9ffbe)),
                             onClick = {
                                 if (newUsername.isNotBlank()){
-                                    viewModel.updateUser(newUsername, avatar = tempAvatar)
+                                    authViewModel.updateUser(newUsername, avatar = tempAvatar)
                                 }
                             }
                         ) {
@@ -213,7 +212,7 @@ fun ProfileScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            viewModel.logout()
+                            authViewModel.logout()
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFa9ffbe))
                     ) {
@@ -223,7 +222,7 @@ fun ProfileScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            viewModel.deleteUser(onDeleted)
+                            authViewModel.deleteUser(onDeleted)
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFff9e94))
                     ) {

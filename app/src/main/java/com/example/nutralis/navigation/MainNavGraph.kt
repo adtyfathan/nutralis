@@ -5,7 +5,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,7 +18,6 @@ import com.example.nutralis.ui.product.ProductResultScreen
 import com.example.nutralis.ui.product.ProductScanScreen
 import com.example.nutralis.ui.product.ScannedProductScreen
 import com.example.nutralis.ui.profile.ProfileScreen
-import com.example.nutralis.ui.profile.ProfileViewModel
 import com.example.nutralis.ui.util.BottomBar
 import com.example.nutralis.ui.util.MainTopbar
 import com.example.nutralis.ui.util.SearchTopbar
@@ -32,7 +30,6 @@ fun MainNavGraph(
     val navController = rememberNavController()
     val bottomScreens = listOf(Screen.Home, Screen.Scan, Screen.Scanned)
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route.orEmpty()
-    val profileViewModel: ProfileViewModel = hiltViewModel()
 
     Scaffold (
         topBar = {
@@ -50,7 +47,7 @@ fun MainNavGraph(
                         currentRoute,
                         navController,
                         onProfileClick = { navController.navigate(Screen.Profile.route) },
-                        profileViewModel = profileViewModel
+                        authViewModel = authViewModel
                     )
                 }
             }
@@ -74,7 +71,7 @@ fun MainNavGraph(
                 ProductResultScreen(backStackEntry.arguments?.getString("barcode").orEmpty())
             }
             composable(Screen.Scanned.route) { ScannedProductScreen(navController = navController) }
-            composable(Screen.Profile.route) { ProfileScreen(onDeleted = { }, viewModel = profileViewModel) }
+            composable(Screen.Profile.route) { ProfileScreen(onDeleted = { }, authViewModel = authViewModel) }
         }
     }
 }
