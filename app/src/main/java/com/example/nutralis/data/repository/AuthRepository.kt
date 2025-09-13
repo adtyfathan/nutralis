@@ -10,12 +10,12 @@ class AuthRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore
 ) {
-    suspend fun register(email: String, password: String, username: String): Result<Unit>{
+    suspend fun register(email: String, password: String, username: String, avatar: String): Result<Unit>{
         return try {
             val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             val uid = authResult.user?.uid ?: throw Exception("User ID is null")
 
-            val user = User(uid = uid, username = username)
+            val user = User(uid = uid, username = username, avatar = avatar)
 
             firestore.collection("users").document(uid).set(user).await()
 
@@ -51,11 +51,14 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun updateUserData(username: String): Result<Unit> {
+    suspend fun updateUserData(username: String, avatar: String): Result<Unit> {
         return try {
             val uid = firebaseAuth.currentUser?.uid ?: throw Exception("User ID is null")
             firestore.collection("users").document(uid)
-                .update("username", username)
+                .update(
+                    "username", username,
+                    "avatar", avatar
+                )
                 .await()
             Result.success(Unit)
         } catch (e: Exception) {

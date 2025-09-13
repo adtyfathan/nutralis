@@ -3,6 +3,7 @@ package com.example.nutralis.ui.auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nutralis.data.repository.AuthRepository
+import com.example.nutralis.ui.profile.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,7 @@ data class AuthUiState(
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val repository: AuthRepository,
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
 ) : ViewModel() {
     private val _currentUser = MutableStateFlow(firebaseAuth.currentUser)
     val currentUser: StateFlow<FirebaseUser?> = _currentUser
@@ -38,7 +39,7 @@ class AuthViewModel @Inject constructor(
     fun register(email: String, password: String, username: String){
         _uiState.value = AuthUiState(isLoading = true)
         viewModelScope.launch {
-            val result = repository.register(email, password, username)
+            val result = repository.register(email, password, username, avatar = "avatar1")
             _uiState.value = if (result.isSuccess){
                 AuthUiState(isSuccess = true)
             } else {

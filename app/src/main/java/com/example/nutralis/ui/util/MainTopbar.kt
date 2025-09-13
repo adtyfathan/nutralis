@@ -1,5 +1,6 @@
 package com.example.nutralis.ui.util
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -7,34 +8,55 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.nutralis.navigation.Screen
+import com.example.nutralis.ui.profile.ProfileViewModel
+import com.example.nutralis.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainTopbar(
     currentRoute: String,
     navController: NavController,
-    onProfileClick: () -> Unit
+    onProfileClick: () -> Unit,
+    profileViewModel: ProfileViewModel
 ){
+    val user by profileViewModel.user.collectAsState()
+    val isLoading by profileViewModel.isLoading.collectAsState()
+
+    fun getUserAvatar(): Int {
+        return when (user?.avatar) {
+            "avatar1" -> R.drawable.avatar1
+            "avatar2" -> R.drawable.avatar2
+            "avatar3" -> R.drawable.avatar3
+            "avatar4" -> R.drawable.avatar4
+            "avatar5" -> R.drawable.avatar5
+            else -> R.drawable.avatar1
+        }
+    }
+
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color(0xFFa9ffbe),
@@ -68,34 +90,21 @@ fun MainTopbar(
             }
         },
         actions = {
-            IconButton(
-                onClick = {
-                    onProfileClick()
-                }
-            ) {
-                Box(
+            if (isLoading) {
+                CircularProgressIndicator()
+            } else {
+                Image(
+                    painter = painterResource(id = getUserAvatar()),
+                    contentDescription = "User Avatar",
                     modifier = Modifier
-                        .background(Color.White)
-                        .padding(8.dp)
-                ){
-                    Icon(
-                        Icons.Default.Person, contentDescription = "Profile",
-                        tint = Color.Black
-                    )
-                }
+                        .size(44.dp)
+                        .clip(CircleShape)
+                        .clickable {
+                            onProfileClick()
+                        },
+                    contentScale = ContentScale.Crop
+                )
             }
         }
-//                actions = {
-//                    IconButton(
-//                        onClick = {
-//                            authViewModel.logout()
-//                        }
-//                    ) {
-//                        Icon(
-//                            imageVector = Icons.AutoMirrored.Filled.ExitToApp,
-//                            contentDescription = "Logout"
-//                        )
-//                    }
-//                }
     )
 }
