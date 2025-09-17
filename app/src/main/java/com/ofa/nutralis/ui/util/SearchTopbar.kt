@@ -54,7 +54,7 @@ fun SearchTopbar(
                     .padding(vertical = 8.dp)
                     .background(Color.White)
                     .border(width = 1.dp, color = Color.Gray, shape = CircleShape),
-                textStyle = TextStyle(fontSize = 16.sp),
+                textStyle = TextStyle(fontSize = 14.sp),
                 singleLine = true,
                 trailingIcon = {
                     IconButton(

@@ -87,8 +87,8 @@ fun RegisterScreen(
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        Color(0xFFEBC894),
-                        Color(0xFFB49EF4)
+                        Color(0xffa6fff0),
+                        Color(0xFFa9ffbe)
                     ),
                     start = Offset(0f, 0f),
                     end = Offset(1000f, 1000f)
@@ -98,16 +98,6 @@ fun RegisterScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFFEBC894),
-                            Color(0xFFB49EF4)
-                        ),
-                        start = Offset(0f, 0f),
-                        end = Offset(1000f, 1000f)
-                    )
-                )
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -115,7 +105,7 @@ fun RegisterScreen(
             Column (
                 modifier = Modifier
                     .clip(RoundedCornerShape(16.dp))
-                    .background(Color.White.copy(alpha = 0.6f))
+                    .background(Color.White.copy(alpha = 0.7f))
                     .fillMaxWidth()
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -216,7 +206,7 @@ fun RegisterScreen(
                 Button(
                     onClick = { viewModel.register(email, password, username) },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF1D61E7),
+                        containerColor = Color(0xFF23b83e),
                         contentColor = Color.White
                     ),
                     shape = RoundedCornerShape(16.dp),
@@ -286,7 +276,7 @@ fun RegisterScreen(
                         Text(
                             "Login",
                             fontSize = 13.sp,
-                            color = Color(0xFF1D61E7)
+                            color = Color(0xFF23b83e)
                         )
                     }
                 }
