@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.nutralis"
+    namespace = "com.ofa.nutralis"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.nutralis"
+        applicationId = "com.ofa.nutralis"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -96,4 +96,10 @@ dependencies {
 
     // Icon
     implementation(libs.androidx.material)
+
+    // Sign in with google
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation(libs.play.services.auth)
 }

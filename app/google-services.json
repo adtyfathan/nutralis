@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:981906491647:android:f7a790cc927e683836a4ca",
+        "mobilesdk_app_id": "1:981906491647:android:8546c238d92f5cd636a4ca",
         "android_client_info": {
-          "package_name": "com.example.nutralis"
+          "package_name": "com.ofa.nutralis"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "981906491647-hgqtq69qn1oa5cd99618egu4h1pno99n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAoUmUrIA4PyBYxL3fxv6GPk3sh41V5jhw"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "981906491647-hgqtq69qn1oa5cd99618egu4h1pno99n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
