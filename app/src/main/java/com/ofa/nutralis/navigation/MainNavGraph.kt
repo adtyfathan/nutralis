@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ofa.nutralis.ui.auth.AuthViewModel
 import com.ofa.nutralis.ui.home.HomeScreen
+import com.ofa.nutralis.ui.product.ProductCompareScreen
 import com.ofa.nutralis.ui.product.ProductInputScreen
 import com.ofa.nutralis.ui.product.ProductInputViewModel
 import com.ofa.nutralis.ui.product.ProductResultScreen
@@ -31,7 +32,7 @@ fun MainNavGraph(
     productInputViewModel: ProductInputViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
-    val bottomScreens = listOf(Screen.Home, Screen.Scan, Screen.Scanned)
+    val bottomScreens = listOf(Screen.Home, Screen.Scan, Screen.Scanned, Screen.Compare)
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route.orEmpty()
 
     Scaffold (
@@ -80,6 +81,7 @@ fun MainNavGraph(
             }
             composable(Screen.Scanned.route) { ScannedProductScreen(navController = navController) }
             composable(Screen.Profile.route) { ProfileScreen(onDeleted = { }, authViewModel = authViewModel) }
+            composable(Screen.Compare.route) { ProductCompareScreen() }
         }
     }
 }
