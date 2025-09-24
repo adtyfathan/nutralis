@@ -16,13 +16,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -80,11 +82,10 @@ fun SearchPopup(
             elevation = CardDefaults.cardElevation(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.85f) // take ~85% of height
+                .fillMaxHeight(0.8f)
                 .padding(12.dp)
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
-                // Header with search bar + close button
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -111,18 +112,21 @@ fun SearchPopup(
                                     contentDescription = "Search"
                                 )
                             }
-                        }
-                    )
-                    IconButton(onClick = onDismiss) {
-                        Icon(
-                            Icons.Default.Clear,
-                            contentDescription = "Close"
+                        },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color(0xFF4CAF50),
+                            focusedLabelColor = Color(0xFF4CAF50),
+                            cursorColor = Color(0xFF4CAF50)
                         )
-                    }
+                    )
                 }
 
                 // Content
-                Box(modifier = Modifier.fillMaxSize()) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
                     when {
                         uiState.isLoading && uiState.products.isEmpty() -> {
                             CircularProgressIndicator(
@@ -236,6 +240,22 @@ fun SearchPopup(
                                 }
                             }
                         }
+                    }
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFa9ffbe)),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    ) {
+                        Text("Close")
                     }
                 }
             }

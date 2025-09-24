@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ofa.nutralis.ui.auth.AuthViewModel
 import com.ofa.nutralis.ui.home.HomeScreen
+import com.ofa.nutralis.ui.product.ProductCompareResultScreen
 import com.ofa.nutralis.ui.product.ProductCompareScreen
 import com.ofa.nutralis.ui.product.ProductInputScreen
 import com.ofa.nutralis.ui.product.ProductInputViewModel
@@ -81,7 +82,20 @@ fun MainNavGraph(
             }
             composable(Screen.Scanned.route) { ScannedProductScreen(navController = navController) }
             composable(Screen.Profile.route) { ProfileScreen(onDeleted = { }, authViewModel = authViewModel) }
-            composable(Screen.Compare.route) { ProductCompareScreen() }
+            composable(Screen.Compare.route) { ProductCompareScreen(onCompareClick = { barcode1, barcode2 -> navController.navigate(
+                route = Screen.CompareResult.createRoute(barcode1, barcode2)) }) }
+            composable(
+                route = Screen.CompareResult.route,
+                arguments = listOf(
+                    navArgument("barcode1") { type = NavType.StringType },
+                    navArgument("barcode2") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val barcode1 = backStackEntry.arguments?.getString("barcode1").orEmpty()
+                val barcode2 = backStackEntry.arguments?.getString("barcode2").orEmpty()
+
+                ProductCompareResultScreen(barcode1, barcode2)
+            }
         }
     }
 }
