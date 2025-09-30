@@ -1,10 +1,29 @@
 package com.ofa.nutralis.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -12,6 +31,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.ofa.nutralis.R
 import com.ofa.nutralis.ui.auth.AuthViewModel
 import com.ofa.nutralis.ui.home.HomeScreen
 import com.ofa.nutralis.ui.product.ProductCompareResultScreen
@@ -58,8 +78,45 @@ fun MainNavGraph(
             }
         },
         bottomBar = {
-            BottomBar(currentRoute, navController, bottomScreens)
-        }
+            Box {
+                BottomBar(currentRoute, navController, bottomScreens)
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .offset(y = (-25).dp)
+                ) {
+                    FloatingActionButton(
+                        onClick = { navController.navigate(Screen.Scan.route) },
+                        shape = CircleShape,
+                        elevation = FloatingActionButtonDefaults.elevation(
+                            defaultElevation = 0.dp,
+                            pressedElevation = 0.dp,
+                            focusedElevation = 0.dp,
+                            hoveredElevation = 0.dp
+                        ),
+                        containerColor = Color(0xFF2E7D32),
+                        modifier = Modifier
+                            .size(64.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.scan),
+                            contentDescription = "Scan",
+                            tint = Color.White,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "Scan",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color.Black,
+                        fontSize = 13.sp
+                    )
+                }
+            }
+        },
     ) { innerPadding ->
         NavHost(
             navController = navController,
