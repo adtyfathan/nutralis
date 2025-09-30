@@ -27,12 +27,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.ofa.nutralis.R
 
 @Composable
 fun ProductResultScreen(
@@ -45,7 +47,6 @@ fun ProductResultScreen(
 
     val state = viewModel.state
 
-    // Define color palette
     val primaryGreen = Color(0xFF4CAF50)
     val lightGreen = Color(0xFF81C784)
     val backgroundColor = Color(0xFFF8F9FA)
@@ -112,26 +113,31 @@ fun ProductResultScreen(
                 ) {
                     // Product Image
                     item {
-                        product.image_url?.let { url ->
-                            Card(
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = CardDefaults.cardColors(containerColor = cardBackground),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                                shape = RoundedCornerShape(16.dp)
-                            ) {
-                                AsyncImage(
-                                    model = ImageRequest.Builder(LocalContext.current)
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(containerColor = cardBackground),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                            shape = RoundedCornerShape(16.dp)
+                        ) {
+                            AsyncImage(
+                                model = if (product.image_url.isNullOrEmpty()) {
+                                    null
+                                } else {
+                                    ImageRequest.Builder(LocalContext.current)
                                         .data(product.image_url)
                                         .crossfade(true)
-                                        .build(),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(240.dp)
-                                        .clip(RoundedCornerShape(16.dp)),
-                                    contentScale = ContentScale.Crop
-                                )
-                            }
+                                        .build()
+                                },
+                                placeholder = painterResource(R.drawable.default_product),
+                                error = painterResource(R.drawable.default_product),
+                                fallback = painterResource(R.drawable.default_product),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(240.dp)
+                                    .clip(RoundedCornerShape(16.dp)),
+                                contentScale = ContentScale.Crop
+                            )
                         }
                     }
 

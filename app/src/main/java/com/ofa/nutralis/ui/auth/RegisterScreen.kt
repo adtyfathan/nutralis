@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -81,234 +82,219 @@ fun RegisterScreen(
         }
     }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xffa6fff0),
-                        Color(0xFFa9ffbe)
-                    ),
-                    start = Offset(0f, 0f),
-                    end = Offset(1000f, 1000f)
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Column (
+            modifier = Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.Black.copy(alpha = 0.5f))
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                "Register",
+                color = Color.White,
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold,
+            )
+            Text(
+                "Create an account to continue",
+                color = Color.Gray,
+                fontSize = 13.sp,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+            TextField(
+                value = email,
+                onValueChange = {email = it},
+                label = { Text("Email") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 8.dp,
+                        bottom = 4.dp
+                    )
+                    .defaultMinSize(minHeight = 36.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedLabelColor = Color.Gray,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent
+                ),
+                textStyle = TextStyle(
+                    color = Color.Black,
+                    fontSize = 13.sp
                 )
             )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Column (
+            TextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Password") },
+                visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color.White.copy(alpha = 0.7f))
                     .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                    .padding(
+                        top = 4.dp,
+                        bottom = 8.dp
+                    )
+                    .defaultMinSize(minHeight = 36.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedLabelColor = Color.Gray,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent
+                ),
+                textStyle = TextStyle(
+                    color = Color.Black,
+                    fontSize = 13.sp
+                )
+            )
+
+            TextField(
+                value = username,
+                onValueChange = { username = it },
+                label = { Text("Username") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 4.dp,
+                        bottom = 8.dp
+                    )
+                    .defaultMinSize(minHeight = 36.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedLabelColor = Color.Gray,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent
+                ),
+                textStyle = TextStyle(
+                    color = Color.Black,
+                    fontSize = 13.sp
+                )
+            )
+
+            Button(
+                onClick = { viewModel.register(email, password, username) },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF23b83e),
+                    contentColor = Color.White
+                ),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp)
+                    .height(56.dp)
             ) {
                 Text(
                     "Register",
-                    color = Color.Black,
-                    fontSize = 40.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Bold
                 )
-                Text(
-                    "Create an account to continue",
-                    color = Color.Gray,
-                    fontSize = 13.sp,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
-                TextField(
-                    value = email,
-                    onValueChange = {email = it},
-                    label = { Text("Email") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 8.dp,
-                            bottom = 4.dp
-                        )
-                        .defaultMinSize(minHeight = 36.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedLabelColor = Color.Gray,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Transparent
-                    ),
-                    textStyle = TextStyle(
-                        color = Color.Black,
-                        fontSize = 13.sp
-                    )
-                )
-                TextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = { Text("Password") },
-                    visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 4.dp,
-                            bottom = 8.dp
-                        )
-                        .defaultMinSize(minHeight = 36.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedLabelColor = Color.Gray,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Transparent
-                    ),
-                    textStyle = TextStyle(
-                        color = Color.Black,
-                        fontSize = 13.sp
-                    )
-                )
+            }
 
-                TextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    label = { Text("Username") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 4.dp,
-                            bottom = 8.dp
-                        )
-                        .defaultMinSize(minHeight = 36.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedLabelColor = Color.Gray,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Transparent
-                    ),
-                    textStyle = TextStyle(
-                        color = Color.Black,
-                        fontSize = 13.sp
-                    )
-                )
+            Text(
+                "Or sign with",
+                modifier = Modifier
+                    .padding(vertical = 16.dp),
+                fontSize = 13.sp,
+                color = Color.Gray
+            )
 
-                Button(
-                    onClick = { viewModel.register(email, password, username) },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF23b83e),
-                        contentColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(16.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-                        .height(56.dp)
-                ) {
-                    Text(
-                        "Register",
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Text(
-                    "Or sign with",
-                    modifier = Modifier
-                        .padding(vertical = 16.dp),
-                    fontSize = 13.sp,
-                    color = Color.Gray
-                )
-
-                Button(
-                    onClick = {
-                        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                            .requestIdToken(viewModel.getWebClientId(context))
-                            .requestEmail()
-                            .build()
-                        val googleClient = GoogleSignIn.getClient(context, gso)
-                        launcher.launch(googleClient.signInIntent)
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface),
-                    shape = RoundedCornerShape(16.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                        .height(56.dp)
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.google),
-                            contentDescription = "google icon",
-                            modifier = Modifier
-                                .size(24.dp),
-                            contentScale = ContentScale.Crop
-                        )
-                        Text(
-                            "Continue with Google",
-                            color = Color.Black
-                        )
-                    }
-                }
-
-                Row (
-                    horizontalArrangement = Arrangement.Center,
+            Button(
+                onClick = {
+                    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(viewModel.getWebClientId(context))
+                        .requestEmail()
+                        .build()
+                    val googleClient = GoogleSignIn.getClient(context, gso)
+                    launcher.launch(googleClient.signInIntent)
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+                    .height(56.dp)
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        "Have an account?",
-                        color = Color.Black,
-                        fontSize = 13.sp
+                    Image(
+                        painter = painterResource(id = R.drawable.google),
+                        contentDescription = "google icon",
+                        modifier = Modifier
+                            .size(24.dp),
+                        contentScale = ContentScale.Crop
                     )
-                    TextButton(onClick = onNavigateToLogin) {
-                        Text(
-                            "Login",
-                            fontSize = 13.sp,
-                            color = Color(0xFF23b83e)
-                        )
-                    }
+                    Text(
+                        "Continue with Google",
+                        color = Color.Black
+                    )
                 }
+            }
 
-                state.error?.let {
-                    Text(it, color = Color.Red)
+            Row (
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "Have an account?",
+                    color = Color.White,
+                    fontSize = 13.sp
+                )
+                TextButton(onClick = onNavigateToLogin) {
+                    Text(
+                        "Login",
+                        fontSize = 13.sp,
+                        color = Color(0xFF23b83e)
+                    )
                 }
+            }
 
-                if(state.isSuccess){
-                    onRegisterSuccess()
-                }
+            state.error?.let {
+                Text(it, color = Color.Red)
+            }
+
+            if(state.isSuccess){
+                onRegisterSuccess()
             }
         }
+    }
 
-        if (state.isLoading) {
+    if (state.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.1f)),
+            contentAlignment = Alignment.Center
+        ) {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.1f)),
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color.White)
+                    .padding(16.dp),
                 contentAlignment = Alignment.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(Color.White)
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ){
-                    CircularProgressIndicator(color = Color(0xFFa9ffbe))
-                }
-
+            ){
+                CircularProgressIndicator(color = Color(0xFFa9ffbe))
             }
+
         }
     }
 }

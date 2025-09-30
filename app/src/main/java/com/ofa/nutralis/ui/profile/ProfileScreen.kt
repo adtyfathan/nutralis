@@ -1,6 +1,7 @@
 package com.ofa.nutralis.ui.profile
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -45,6 +46,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.ofa.nutralis.R
 import com.ofa.nutralis.ui.auth.AuthViewModel
 
 @Composable
@@ -73,10 +75,14 @@ fun ProfileScreen(
     ){
         when {
             state.isLoading -> {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    color = Color(0xFFa9ffbe)
+                )
             }
             state.error != null -> {
-                Text("Error: ${state.error}")
+                Text("Error: ${state.error}", modifier = Modifier.align(Alignment.Center))
             }
             user != null -> {
                 if (showAvatarPicker) {
@@ -146,13 +152,26 @@ fun ProfileScreen(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.End
                                 ) {
-                                    TextButton(onClick = { authViewModel.closeAvatarPicker() }) {
+                                    TextButton(
+                                        onClick = {
+                                            authViewModel.closeAvatarPicker()
+                                        },
+                                        colors = ButtonDefaults.textButtonColors(
+                                            contentColor = Color.Gray
+                                        )
+                                    ) {
                                         Text("Cancel")
                                     }
                                     Spacer(Modifier.width(8.dp))
-                                    Button(onClick = {
-                                        authViewModel.closeAvatarPicker()
-                                    }) {
+                                    Button(
+                                        onClick = {
+                                            authViewModel.closeAvatarPicker()
+                                        },
+                                        colors = ButtonDefaults.buttonColors(
+                                            backgroundColor = Color(0xFF4CAF50),
+                                            contentColor = Color.White
+                                        )
+                                    ) {
                                         Text("Select")
                                     }
                                 }
@@ -161,7 +180,6 @@ fun ProfileScreen(
                     }
                 }
 
-
                 Column(
                     verticalArrangement = Arrangement.spacedBy(24.dp),
                     modifier = Modifier
@@ -169,22 +187,57 @@ fun ProfileScreen(
                         .align(Alignment.TopCenter),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(
-                        painter = painterResource(id = authViewModel.getAvatarResource(tempAvatar)),
-                        contentDescription = "User Avatar",
-                        modifier = Modifier
-                            .size(148.dp)
-                            .clip(CircleShape)
-                            .clickable { authViewModel.openAvatarPicker() },
-                        contentScale = ContentScale.Crop
-                    )
+                    Box(
+                        contentAlignment = Alignment.BottomEnd,
+                        modifier = Modifier.size(148.dp)
+                    ) {
+                        // Avatar
+                        Image(
+                            painter = painterResource(id = authViewModel.getAvatarResource(tempAvatar)),
+                            contentDescription = "User Avatar",
+                            modifier = Modifier
+                                .size(148.dp)
+                                .clip(CircleShape)
+                                .clickable { authViewModel.openAvatarPicker() },
+                            contentScale = ContentScale.Crop
+                        )
+
+                        // Pencil circle
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(CircleShape)
+                                .background(Color.White)
+                                .border(2.dp, Color(0xFF4CAF50), CircleShape)
+                                .clickable { authViewModel.openAvatarPicker() },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.edit),
+                                contentDescription = "Edit Avatar",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    }
+
 
                     OutlinedTextField(
                         value = newUsername,
                         onValueChange = { newUsername = it },
                         label = { Text("Username") },
-                        modifier = Modifier.fillMaxWidth()
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp)),
+                        colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color(0xFF4CAF50),
+                            unfocusedBorderColor = Color(0xFFc4c4c4),
+                            focusedLabelColor = Color(0xFF4CAF50),
+                            cursorColor = Color(0xFF4CAF50)
+                        ),
+                        shape = RoundedCornerShape(12.dp)
                     )
+
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -196,9 +249,13 @@ fun ProfileScreen(
                                 if (newUsername.isNotBlank()){
                                     authViewModel.updateUser(newUsername, avatar = tempAvatar)
                                 }
-                            }
+                            },
+                            shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text("Save")
+                            Text(
+                                "Save",
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            )
                         }
                     }
                 }
@@ -207,16 +264,20 @@ fun ProfileScreen(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             authViewModel.logout()
                         },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFa9ffbe))
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFa9ffbe)),
+                        shape = RoundedCornerShape(16.dp)
                     ) {
-                        Text("Logout")
+                        Text(
+                            "Logout",
+                            modifier = Modifier.padding(vertical = 6.dp),
+                        )
                     }
 
                     Button(
@@ -224,9 +285,13 @@ fun ProfileScreen(
                         onClick = {
                             authViewModel.deleteUser(onDeleted)
                         },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFff9e94))
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFff9e94)),
+                        shape = RoundedCornerShape(16.dp)
                     ) {
-                        Text("Delete Account")
+                        Text(
+                            "Delete Account",
+                            modifier = Modifier.padding(vertical = 6.dp)
+                        )
                     }
                 }
             }

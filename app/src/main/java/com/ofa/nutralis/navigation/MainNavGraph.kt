@@ -33,7 +33,7 @@ fun MainNavGraph(
     productInputViewModel: ProductInputViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
-    val bottomScreens = listOf(Screen.Home, Screen.Scan, Screen.Scanned, Screen.Compare)
+    val bottomScreens = listOf(Screen.Home, Screen.Scan, Screen.Scanned)
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route.orEmpty()
 
     Scaffold (
@@ -66,7 +66,13 @@ fun MainNavGraph(
             startDestination = Screen.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Home.route) { HomeScreen() }
+            composable(Screen.Home.route) { HomeScreen(
+                onProductClick = { barcode ->
+                    navController.navigate(Screen.Result.createRoute(barcode))
+                },
+                onSearchClick = { navController.navigate(Screen.Input.route) },
+                onCompareClick = { navController.navigate(Screen.Compare.route) },
+            ) }
             composable(Screen.Scan.route) { ProductScanScreen { barcode -> navController.navigate(Screen.Result.createRoute(barcode)) } }
             composable(Screen.Input.route) { ProductInputScreen(
                 productInputViewModel,

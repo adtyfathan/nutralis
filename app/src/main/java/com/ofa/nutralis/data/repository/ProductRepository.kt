@@ -19,5 +19,4 @@ class ProductRepository @Inject constructor(
             page = page
         )
     }
-
 }
