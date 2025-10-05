@@ -27,10 +27,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.ofa.nutralis.R
 import com.ofa.nutralis.navigation.Screen
 import com.ofa.nutralis.ui.auth.AuthViewModel
 
@@ -69,7 +73,7 @@ fun MainTopbar(
                         tint = Color.Black,
                     )
                     Text(
-                        text = "Cari produk",
+                        text = "Search a product...",
                         color = Color.Black,
                         modifier = Modifier.padding(start = 8.dp),
                         fontSize = 16.sp
@@ -78,21 +82,31 @@ fun MainTopbar(
             }
         },
         actions = {
-            if (state.isLoading) {
-                CircularProgressIndicator()
-            } else {
-                Image(
-                    painter = painterResource(id = authViewModel.getAvatarResource(user?.avatar)),
-                    contentDescription = "User Avatar",
-                    modifier = Modifier
-                        .size(44.dp)
-                        .clip(CircleShape)
-                        .clickable {
-                            onProfileClick()
-                        },
-                    contentScale = ContentScale.Crop
-                )
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(CircleShape)
+                    .background(Color.White),
+                contentAlignment = Alignment.Center
+            ) {
+                if (state.isLoading) {
+                    CircularProgressIndicator(
+                        color = Color(0xFFa9ffbe),
+                        strokeWidth = 2.dp,
+                        modifier = Modifier.size(24.dp)
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(id = authViewModel.getAvatarResource(user?.avatar)),
+                        contentDescription = "User Avatar",
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clickable { onProfileClick() },
+                        contentScale = ContentScale.Crop,
+                    )
+                }
             }
+
         }
     )
 }

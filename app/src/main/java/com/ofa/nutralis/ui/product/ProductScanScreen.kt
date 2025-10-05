@@ -93,14 +93,20 @@ fun ProductScanScreen(onBarcodeScanned: (String) -> Unit) {
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
-        onResult = { granted -> hasCameraPermission = granted }
+        onResult = { granted ->
+            hasCameraPermission = granted || ContextCompat.checkSelfPermission(
+                context, Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
     )
 
-    LaunchedEffect(Unit) {
+
+    LaunchedEffect(hasCameraPermission) {
         if (!hasCameraPermission) {
             launcher.launch(Manifest.permission.CAMERA)
         }
     }
+
 
     Box(
         modifier = Modifier
@@ -172,9 +178,9 @@ fun ProductScanScreen(onBarcodeScanned: (String) -> Unit) {
                             .background(Color.White.copy(alpha = 0.8f), CircleShape)
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Info,
+                            painter = painterResource(id = R.drawable.info),
                             contentDescription = "How to use scanner",
-                            tint = primaryGreen
+                            tint = if (showInfoDialog) Color(0xFF4CAF50) else Color.Black
                         )
                     }
 
@@ -188,10 +194,12 @@ fun ProductScanScreen(onBarcodeScanned: (String) -> Unit) {
                             .background(Color.White.copy(alpha = 0.8f), CircleShape)
                     ) {
                         Icon(
-                            imageVector = Icons.Default.PlayArrow,
-                            contentDescription = "Toggle flash"
+                            painter = painterResource(id = R.drawable.flash),
+                            contentDescription = "Toggle flash",
+                            tint = if (torchEnabled) Color(0xFF4CAF50) else Color.Black,
                         )
                     }
+
                 }
 
                 // Info dialog

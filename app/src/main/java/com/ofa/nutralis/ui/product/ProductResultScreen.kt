@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -27,12 +28,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.ofa.nutralis.R
 
 @Composable
 fun ProductResultScreen(
@@ -45,7 +49,6 @@ fun ProductResultScreen(
 
     val state = viewModel.state
 
-    // Define color palette
     val primaryGreen = Color(0xFF4CAF50)
     val lightGreen = Color(0xFF81C784)
     val backgroundColor = Color(0xFFF8F9FA)
@@ -107,23 +110,34 @@ fun ProductResultScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
+                        .padding(
+                            top = 16.dp,
+                            start = 16.dp,
+                            end = 16.dp
+                        ),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     // Product Image
                     item {
-                        product.image_url?.let { url ->
-                            Card(
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = CardDefaults.cardColors(containerColor = cardBackground),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                                shape = RoundedCornerShape(16.dp)
-                            ) {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(containerColor = cardBackground),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                            shape = RoundedCornerShape(16.dp)
+                        ) {
+                            Box {
                                 AsyncImage(
-                                    model = ImageRequest.Builder(LocalContext.current)
-                                        .data(product.image_url)
-                                        .crossfade(true)
-                                        .build(),
+                                    model = if (product.image_url.isNullOrEmpty()) {
+                                        null
+                                    } else {
+                                        ImageRequest.Builder(LocalContext.current)
+                                            .data(product.image_url)
+                                            .crossfade(true)
+                                            .build()
+                                    },
+                                    placeholder = painterResource(R.drawable.default_product),
+                                    error = painterResource(R.drawable.default_product),
+                                    fallback = painterResource(R.drawable.default_product),
                                     contentDescription = null,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -131,6 +145,34 @@ fun ProductResultScreen(
                                         .clip(RoundedCornerShape(16.dp)),
                                     contentScale = ContentScale.Crop
                                 )
+
+                                val grade = product.nutriscore_grade?.lowercase()
+                                val (gradeText, gradeColor) = when (grade) {
+                                    "a" -> "A" to Color(0xFF4CAF50)
+                                    "b" -> "B" to Color(0xFF8BC34A)
+                                    "c" -> "C" to Color(0xFFFFC107)
+                                    "d" -> "D" to Color(0xFFFF9800)
+                                    "e" -> "E" to Color(0xFFF44336)
+                                    else -> "-" to Color.Gray
+                                }
+
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.TopEnd)
+                                        .padding(top = 8.dp, end = 8.dp)
+                                        .size(36.dp)
+                                        .background(gradeColor, CircleShape),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = gradeText,
+                                        color = Color.White,
+                                        style = MaterialTheme.typography.bodyMedium.copy(
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 14.sp
+                                        )
+                                    )
+                                }
                             }
                         }
                     }
@@ -147,7 +189,7 @@ fun ProductResultScreen(
                                 modifier = Modifier.padding(20.dp)
                             ) {
                                 Text(
-                                    "Informasi Produk",
+                                    "Product Information",
                                     style = MaterialTheme.typography.headlineSmall,
                                     color = primaryGreen,
                                     fontWeight = FontWeight.Bold
@@ -155,12 +197,11 @@ fun ProductResultScreen(
                                 Spacer(modifier = Modifier.height(16.dp))
 
                                 InfoRow("Barcode", barcode, textPrimary, textSecondary)
-                                InfoRow("Nama Produk", product.product_name, textPrimary, textSecondary)
-                                InfoRow("Grade Nutrisi", product.nutriscore_grade, textPrimary, textSecondary)
-                                InfoRow("Skor Nutrisi", product.nutriscore_score?.toString(), textPrimary, textSecondary)
-                                InfoRow("Tipe Produk", product.product_type, textPrimary, textSecondary)
+                                InfoRow("Product Name", product.product_name, textPrimary, textSecondary)
+                                InfoRow("Nutrition Score", "${product.nutriscore_score?.toString()}/100", textPrimary, textSecondary)
+                                InfoRow("Product Type", product.product_type, textPrimary, textSecondary)
                                 InfoRow("Packaging", product.packaging, textPrimary, textSecondary)
-                                InfoRow("Negara Asal", product.countries, textPrimary, textSecondary)
+                                InfoRow("Distribution", product.countries, textPrimary, textSecondary)
                             }
                         }
                     }
@@ -178,13 +219,14 @@ fun ProductResultScreen(
                                     modifier = Modifier.padding(20.dp)
                                 ) {
                                     Text(
-                                        "Kategori Produk",
+                                        "Product Categories",
                                         style = MaterialTheme.typography.headlineSmall,
                                         color = primaryGreen,
                                         fontWeight = FontWeight.Bold
                                     )
                                     Spacer(modifier = Modifier.height(12.dp))
                                     product.categories_tags?.forEach { category ->
+                                        val formattedCategory = category.substringAfter(":")
                                         Row(
                                             modifier = Modifier.padding(vertical = 4.dp),
                                             verticalAlignment = Alignment.CenterVertically
@@ -196,7 +238,7 @@ fun ProductResultScreen(
                                             )
                                             Spacer(modifier = Modifier.width(12.dp))
                                             Text(
-                                                category,
+                                                formattedCategory,
                                                 style = MaterialTheme.typography.bodyMedium,
                                                 color = textPrimary
                                             )
@@ -208,62 +250,87 @@ fun ProductResultScreen(
                     }
 
                     // Nutrient Levels
-                    product.nutrient_levels?.let { nutrientLevels ->
-                        item {
-                            Card(
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = CardDefaults.cardColors(containerColor = cardBackground),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                                shape = RoundedCornerShape(16.dp)
-                            ) {
-                                Column(
-                                    modifier = Modifier.padding(20.dp)
+                    if (
+                        listOf(
+                            product.nutrient_levels?.fat,
+                            product.nutrient_levels?.salt,
+                            product.nutrient_levels?.`saturated-fat`,
+                            product.nutrient_levels?.sugars
+                        ).any { !it.isNullOrEmpty() }
+                    ) {
+                        product.nutrient_levels.let { nutrientLevels ->
+                            item {
+                                Card(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = CardDefaults.cardColors(containerColor = cardBackground),
+                                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                                    shape = RoundedCornerShape(16.dp)
                                 ) {
-                                    Text(
-                                        "Tingkat Nutrisi",
-                                        style = MaterialTheme.typography.headlineSmall,
-                                        color = primaryGreen,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Column(
+                                        modifier = Modifier.padding(20.dp)
+                                    ) {
+                                        Text(
+                                            "Nutrient Levels",
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            color = primaryGreen,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        Spacer(modifier = Modifier.height(16.dp))
 
-                                    InfoRow("Lemak", nutrientLevels.fat, textPrimary, textSecondary)
-                                    InfoRow("Garam", nutrientLevels.salt, textPrimary, textSecondary)
-                                    InfoRow("Lemak Olahan", nutrientLevels.`saturated-fat`, textPrimary, textSecondary)
-                                    InfoRow("Gula", nutrientLevels.sugars, textPrimary, textSecondary)
+                                        InfoRow("Fat",
+                                            nutrientLevels?.fat, textPrimary, textSecondary)
+                                        InfoRow("Salt",
+                                            nutrientLevels?.salt, textPrimary, textSecondary)
+                                        InfoRow("Saturated Fat",
+                                            nutrientLevels?.`saturated-fat`, textPrimary, textSecondary)
+                                        InfoRow("Sugars",
+                                            nutrientLevels?.sugars, textPrimary, textSecondary)
+                                    }
                                 }
                             }
                         }
                     }
 
                     // Nutriments
-                    product.nutriments?.let { nutriments ->
-                        item {
-                            Card(
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = CardDefaults.cardColors(containerColor = cardBackground),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                                shape = RoundedCornerShape(16.dp)
-                            ) {
-                                Column(
-                                    modifier = Modifier.padding(20.dp)
+                    if (listOf(
+                            product.nutriments?.carbohydrates,
+                            product.nutriments?.energy,
+                            product.nutriments?.fat,
+                            product.nutriments?.proteins,
+                            product.nutriments?.salt,
+                            product.nutriments?.`saturated-fat`,
+                            product.nutriments?.sodium,
+                            product.nutriments?.sugars
+                        ).any { it != null }
+                    ) {
+                        product.nutriments?.let { nutriments ->
+                            item {
+                                Card(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = CardDefaults.cardColors(containerColor = cardBackground),
+                                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                                    shape = RoundedCornerShape(16.dp)
                                 ) {
-                                    Text(
-                                        "Daftar Nutrisi",
-                                        style = MaterialTheme.typography.headlineSmall,
-                                        color = primaryGreen,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Column(
+                                        modifier = Modifier.padding(20.dp)
+                                    ) {
+                                        Text(
+                                            "Nutrients",
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            color = primaryGreen,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        Spacer(modifier = Modifier.height(16.dp))
 
-                                    NutrientRow("Karbohidrat", nutriments.carbohydrates, nutriments.carbohydrates_unit, textPrimary, textSecondary)
-                                    NutrientRow("Energi", nutriments.energy, nutriments.energy_unit, textPrimary, textSecondary)
-                                    NutrientRow("Lemak", nutriments.fat, nutriments.fat_unit, textPrimary, textSecondary)
-                                    NutrientRow("Protein", nutriments.proteins, nutriments.proteins_unit, textPrimary, textSecondary)
-                                    NutrientRow("Garam", nutriments.salt, nutriments.salt_unit, textPrimary, textSecondary)
-                                    NutrientRow("Lemak Olahan", nutriments.`saturated-fat`, "g", textPrimary, textSecondary)
-                                    NutrientRow("Sodium", nutriments.sodium, nutriments.sodium_unit, textPrimary, textSecondary)
-                                    NutrientRow("Gula", nutriments.sugars, nutriments.sugars_unit, textPrimary, textSecondary)
+                                        InfoRow("Carbohydrates", "${nutriments.carbohydrates ?: "-"} ${nutriments.carbohydrates_unit ?: ""}", textPrimary, textSecondary)
+                                        InfoRow("Energy", "${nutriments.energy ?: "-"} ${nutriments.energy_unit ?: ""}", textPrimary, textSecondary)
+                                        InfoRow("Fat", "${nutriments.fat ?: "-"} ${nutriments.fat_unit ?: ""}", textPrimary, textSecondary)
+                                        InfoRow("Protein", "${nutriments.proteins ?: "-"} ${nutriments.proteins_unit ?: ""}", textPrimary, textSecondary)
+                                        InfoRow("Salt", "${nutriments.salt ?: "-"} ${nutriments.salt_unit ?: ""}", textPrimary, textSecondary)
+                                        InfoRow("Saturated Fat", "${nutriments.`saturated-fat` ?: "-"} g", textPrimary, textSecondary)
+                                        InfoRow("Sodium", "${nutriments.sodium ?: "-"} ${nutriments.sodium_unit ?: ""}", textPrimary, textSecondary)
+                                        InfoRow("Sugars", "${nutriments.sugars ?: "-"} ${nutriments.sugars_unit ?: ""}", textPrimary, textSecondary)
+                                    }
                                 }
                             }
                         }
@@ -282,39 +349,15 @@ fun ProductResultScreen(
                                     modifier = Modifier.padding(20.dp)
                                 ) {
                                     Text(
-                                        "Komposisi Bahan",
+                                        "Ingredients",
                                         style = MaterialTheme.typography.headlineSmall,
                                         color = primaryGreen,
                                         fontWeight = FontWeight.Bold
                                     )
                                     Spacer(modifier = Modifier.height(12.dp))
+
                                     product.ingredients?.forEach { ingredient ->
-                                        Row(
-                                            modifier = Modifier.padding(vertical = 4.dp),
-                                            verticalAlignment = Alignment.Top
-                                        ) {
-                                            Box(
-                                                modifier = Modifier
-                                                    .size(6.dp)
-                                                    .background(lightGreen, RoundedCornerShape(3.dp))
-                                            )
-                                            Spacer(modifier = Modifier.width(12.dp))
-                                            Column {
-                                                Text(
-                                                    ingredient.text ?: "Unknown",
-                                                    style = MaterialTheme.typography.bodyMedium,
-                                                    color = textPrimary
-                                                )
-                                                ingredient.percent_estimate?.let { percent ->
-                                                    Text(
-                                                        "${percent}%",
-                                                        style = MaterialTheme.typography.bodySmall,
-                                                        color = textSecondary,
-                                                        fontSize = 12.sp
-                                                    )
-                                                }
-                                            }
-                                        }
+                                        InfoRow("${ingredient.text}", "${ingredient.percent_estimate}%", textPrimary, textSecondary)
                                     }
                                 }
                             }
@@ -334,13 +377,14 @@ fun ProductResultScreen(
                                     modifier = Modifier.padding(20.dp)
                                 ) {
                                     Text(
-                                        "Peringatan Alergen",
+                                        "Allergen Warning",
                                         style = MaterialTheme.typography.headlineSmall,
                                         color = Color(0xFFFF5722),
                                         fontWeight = FontWeight.Bold
                                     )
                                     Spacer(modifier = Modifier.height(12.dp))
                                     product.allergens_hierarchy?.forEach { allergen ->
+                                        val formattedAllergen = allergen.substringAfter(":")
                                         Row(
                                             modifier = Modifier.padding(vertical = 4.dp),
                                             verticalAlignment = Alignment.CenterVertically
@@ -352,7 +396,7 @@ fun ProductResultScreen(
                                             )
                                             Spacer(modifier = Modifier.width(12.dp))
                                             Text(
-                                                allergen,
+                                                formattedAllergen,
                                                 style = MaterialTheme.typography.bodyMedium,
                                                 color = textPrimary
                                             )
@@ -381,26 +425,35 @@ private fun InfoRow(
     textSecondary: Color
 ) {
     if (value != null) {
-        Column(
-            modifier = Modifier.padding(vertical = 6.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 label,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.Bold
+                ),
                 color = textSecondary,
-                fontWeight = FontWeight.Medium,
-                fontSize = 12.sp
+                fontSize = 12.sp,
+                modifier = Modifier
+                    .weight(1f)
+                    .align(Alignment.Top) // left side
             )
-            Spacer(modifier = Modifier.height(2.dp))
             Text(
                 value,
                 style = MaterialTheme.typography.bodyMedium,
                 color = textPrimary,
-                fontWeight = FontWeight.Normal
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.weight(1f), // right side
+                textAlign = TextAlign.Start
             )
         }
     }
 }
+
 
 @Composable
 private fun NutrientRow(

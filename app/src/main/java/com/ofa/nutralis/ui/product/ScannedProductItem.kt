@@ -74,12 +74,9 @@ fun ScannedProductItem(
             ) {
                 Text(
                     text = if (scannedProduct.product_name.isNullOrBlank()) "Unknown" else scannedProduct.product_name,
-//                    scannedProduct.product_name ?: "Unknown",
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                     )
-//                Text(scannedProduct.product_type ?: "Unknown")
-//                Text(scannedProduct.nutriscore_score?.toString() ?: "Unknown")
             }
 
             Box(

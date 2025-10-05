@@ -16,9 +16,9 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector?
     object Result : Screen("product_result/{barcode}", "Result"){
         fun createRoute(barcode: String) = "product_result/$barcode"
     }
-    object Scanned : Screen("scanned_product", "Scanned", Icons.Default.Menu)
+    object Scanned : Screen("scanned_product", "History", Icons.Default.Menu)
     object Profile : Screen("profile", "Profile")
-    object Compare : Screen("compare", "Compare", Icons.Default.Info)
+    object Compare : Screen("compare", "Compare")
     object CompareResult : Screen("compare_result/{barcode1}/{barcode2}", "Compare Result"){
         fun createRoute(barcode1: String, barcode2: String) = "compare_result/$barcode1/$barcode2"
 

@@ -61,10 +61,12 @@ class AuthViewModel @Inject constructor(
         _uiState.value = AuthUiState(isLoading = true)
         viewModelScope.launch {
             val result = repository.signInWithGoogle(idToken)
-            _uiState.value = if (result.isSuccess) {
-                AuthUiState(isSuccess = true)
+            if (result.isSuccess) {
+                repository.getUserData()
+                    .onSuccess { _userData.value = it }
+                _uiState.value = AuthUiState(isSuccess = true)
             } else {
-                AuthUiState(error = result.exceptionOrNull()?.message)
+                _uiState.value = AuthUiState(error = result.exceptionOrNull()?.message)
             }
         }
     }
@@ -77,10 +79,12 @@ class AuthViewModel @Inject constructor(
         _uiState.value = AuthUiState(isLoading = true)
         viewModelScope.launch {
             val result = repository.register(email, password, username, avatar = "avatar1")
-            _uiState.value = if (result.isSuccess){
-                AuthUiState(isSuccess = true)
+            if (result.isSuccess) {
+                repository.getUserData()
+                    .onSuccess { _userData.value = it }
+                _uiState.value = AuthUiState(isSuccess = true)
             } else {
-                AuthUiState(error = result.exceptionOrNull()?.message)
+                _uiState.value = AuthUiState(error = result.exceptionOrNull()?.message)
             }
         }
     }
@@ -89,10 +93,12 @@ class AuthViewModel @Inject constructor(
         _uiState.value = AuthUiState(isLoading = true)
         viewModelScope.launch {
             val result = repository.login(email, password)
-            _uiState.value = if (result.isSuccess){
-                AuthUiState(isSuccess = true)
+            if (result.isSuccess) {
+                repository.getUserData()
+                    .onSuccess { _userData.value = it }
+                _uiState.value = AuthUiState(isSuccess = true)
             } else {
-                AuthUiState(error = result.exceptionOrNull()?.message)
+                _uiState.value = AuthUiState(error = result.exceptionOrNull()?.message)
             }
         }
     }
