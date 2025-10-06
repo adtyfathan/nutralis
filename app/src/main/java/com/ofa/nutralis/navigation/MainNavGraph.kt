@@ -141,6 +141,7 @@ fun MainNavGraph(
                 },
                 onSearchClick = { navController.navigate(Screen.Input.route) },
                 onCompareClick = { navController.navigate(Screen.Compare.route) },
+                authViewModel = authViewModel
             ) }
             composable(Screen.Scan.route) { ProductScanScreen { barcode -> navController.navigate(Screen.Result.createRoute(barcode)) } }
             composable(Screen.Input.route) { ProductInputScreen(

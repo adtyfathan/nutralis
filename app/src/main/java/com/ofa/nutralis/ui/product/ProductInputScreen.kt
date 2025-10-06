@@ -192,10 +192,9 @@ import com.ofa.nutralis.R
                                 Box(
                                     contentAlignment = Alignment.Center,
                                     modifier = Modifier
-//                                        .clip(RoundedCornerShape(8.dp))
+//                                      .clip(RoundedCornerShape(8.dp))
                                         .size(36.dp)
                                         .background(gradeColor, shape = CircleShape)
-                                        .padding(horizontal = 12.dp, vertical = 12.dp)
                                 ) {
                                     Text(
                                         text = gradeText,

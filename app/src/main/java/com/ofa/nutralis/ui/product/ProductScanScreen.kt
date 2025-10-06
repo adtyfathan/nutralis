@@ -78,7 +78,6 @@ fun ProductScanScreen(onBarcodeScanned: (String) -> Unit) {
     val previewView = remember { PreviewView(context) }
 
     val primaryGreen = Color(0xFF4CAF50)
-    val lightGreen = Color(0xFF81C784)
     val darkGreen = Color(0xFF2E7D32)
     val backgroundColor = Color(0xFFF8F9FA)
 
@@ -114,7 +113,6 @@ fun ProductScanScreen(onBarcodeScanned: (String) -> Unit) {
             .background(backgroundColor)
     ) {
         if (hasCameraPermission) {
-            var imageCapture: ImageCapture? by remember { mutableStateOf(null) }
             var camera: Camera? by remember { mutableStateOf(null) }
             var torchEnabled by remember { mutableStateOf(false) }
             var showInfoDialog by remember { mutableStateOf(false) }

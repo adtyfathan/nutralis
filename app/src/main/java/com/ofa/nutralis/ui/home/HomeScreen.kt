@@ -48,13 +48,15 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ofa.nutralis.R
 import com.ofa.nutralis.data.remote.ProductItem
+import com.ofa.nutralis.ui.auth.AuthViewModel
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     onProductClick: (String) -> Unit,
     onSearchClick: () -> Unit,
-    onCompareClick: () -> Unit
+    onCompareClick: () -> Unit,
+    authViewModel: AuthViewModel
 ) {
     val selectedCategory by viewModel.selectedCategory.collectAsState()
     val products by viewModel.products.collectAsState()
@@ -72,7 +74,7 @@ fun HomeScreen(
     ) {
         item {
             Text(
-                text = "Welcome to Nutralis, user!",
+                text = "Welcome to Nutralis, ${authViewModel.userData.collectAsState().value?.username}!",
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                 color = Color.Black
             )
@@ -242,7 +244,7 @@ fun HomeScreen(
             Text(
                 text = "Explore by Category",
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = Color(0xFF78C841),
+                color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
