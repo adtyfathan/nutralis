@@ -43,6 +43,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ofa.nutralis.R
 import com.ofa.nutralis.data.remote.Product
+import kotlin.text.substringAfter
 
 // Color palette
 private val PrimaryGreen = Color(0xFF78C841)
@@ -477,13 +478,16 @@ private fun ComparisonRow(label: String, value1: ComparisonValue, value2: Compar
 @Composable
 private fun ComparisonValueContent(value: ComparisonValue, modifier: Modifier = Modifier) {
     when (value) {
-        is ComparisonValue.Text -> Text(
-            text = value.value,
-            fontSize = 13.sp,
-            color = TextDark,
-            fontWeight = FontWeight.Normal,
-            modifier = modifier
-        )
+        is ComparisonValue.Text -> {
+            val formattedValue = value.value.substringAfter(":")
+            Text(
+                text = formattedValue,
+                fontSize = 13.sp,
+                color = TextDark,
+                fontWeight = FontWeight.Normal,
+                modifier = modifier
+            )
+        }
 
         is ComparisonValue.Level -> Text(
             text = value.level.replaceFirstChar { it.uppercase() },
@@ -521,6 +525,7 @@ fun RowList(listData: List<String>, modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         listData.forEach { item ->
+            val formattedItem = item.substringAfter(":")
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
@@ -533,7 +538,7 @@ fun RowList(listData: List<String>, modifier: Modifier = Modifier) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = item,
+                    text = formattedItem,
                     fontSize = 13.sp,
                     color = TextDark,
                     fontWeight = FontWeight.Normal,
