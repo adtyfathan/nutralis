@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -79,23 +80,26 @@ fun ScannedProductItem(
                     )
             }
 
+            val grade = scannedProduct.nutriscore_grade?.lowercase()
+            val (gradeText, gradeColor) = when (grade) {
+                "a" -> "A" to Color(0xFF53C406)
+                "b" -> "B" to Color(0xFF78C841)
+                "c" -> "C" to Color(0xFFF5D800)
+                "d" -> "D" to Color(0xFFF5BB00)
+                "e" -> "E" to Color(0xFFEB1B00)
+                else -> "-" to Color.Gray
+            }
+
             Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(
-                        when (scannedProduct.nutriscore_grade) {
-                            "a" -> Color(0xFF4CAF50)
-                            "b" -> Color(0xFF8BC34A)
-                            "c" -> Color(0xFFFFC107)
-                            "d" -> Color(0xFFFF9800)
-                            "e" -> Color(0xFFF44336)
-                            else -> Color.Gray
-                        }
-                    )
-                    .padding(horizontal = 12.dp, vertical = 4.dp)
+//                    .clip(RoundedCornerShape(8.dp))
+                    .size(36.dp)
+                    .background(gradeColor, shape = CircleShape)
+//                    .padding(horizontal = 12.dp, vertical = 4.dp)
             ) {
                 androidx.compose.material.Text(
-                    text = if (scannedProduct.nutriscore_grade.isNullOrBlank() || scannedProduct.nutriscore_grade == "unknown") "-" else scannedProduct.nutriscore_grade,
+                    text = gradeText,
                     color = Color.White,
                 )
             }

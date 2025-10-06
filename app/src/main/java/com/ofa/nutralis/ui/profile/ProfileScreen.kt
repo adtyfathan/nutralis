@@ -130,7 +130,7 @@ fun ProfileScreen(
                                                 .clip(CircleShape)
                                                 .border(
                                                     width = if (isSelected) 3.dp else 0.dp,
-                                                    color = if (isSelected) Color(0xFF4CAF50) else Color.Transparent,
+                                                    color = if (isSelected) Color(0xFF5AAD21) else Color.Transparent,
                                                     shape = CircleShape
                                                 )
                                                 .clickable { tempAvatar = avatar }
@@ -168,7 +168,7 @@ fun ProfileScreen(
                                             authViewModel.closeAvatarPicker()
                                         },
                                         colors = ButtonDefaults.buttonColors(
-                                            backgroundColor = Color(0xFF4CAF50),
+                                            backgroundColor = Color(0xFF5AAD21),
                                             contentColor = Color.White
                                         )
                                     ) {
@@ -208,7 +208,7 @@ fun ProfileScreen(
                                 .size(40.dp)
                                 .clip(CircleShape)
                                 .background(Color.White)
-                                .border(2.dp, Color(0xFF4CAF50), CircleShape)
+                                .border(2.dp, Color(0xFF5AAD21), CircleShape)
                                 .clickable { authViewModel.openAvatarPicker() },
                             contentAlignment = Alignment.Center
                         ) {
@@ -230,10 +230,10 @@ fun ProfileScreen(
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(12.dp)),
                         colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = Color(0xFF4CAF50),
+                            focusedBorderColor = Color(0xFF5AAD21),
                             unfocusedBorderColor = Color(0xFFc4c4c4),
-                            focusedLabelColor = Color(0xFF4CAF50),
-                            cursorColor = Color(0xFF4CAF50)
+                            focusedLabelColor = Color(0xFF5AAD21),
+                            cursorColor = Color(0xFF5AAD21)
                         ),
                         shape = RoundedCornerShape(12.dp)
                     )
@@ -244,7 +244,7 @@ fun ProfileScreen(
                         horizontalArrangement = Arrangement.End
                     ) {
                         Button(
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFa9ffbe)),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF5AAD21)),
                             onClick = {
                                 if (newUsername.isNotBlank()){
                                     authViewModel.updateUser(newUsername, avatar = tempAvatar)
@@ -254,7 +254,8 @@ fun ProfileScreen(
                         ) {
                             Text(
                                 "Save",
-                                modifier = Modifier.padding(horizontal = 16.dp)
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                color = Color.White
                             )
                         }
                     }
@@ -271,12 +272,13 @@ fun ProfileScreen(
                         onClick = {
                             authViewModel.logout()
                         },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFa9ffbe)),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFEB1B00)),
                         shape = RoundedCornerShape(16.dp)
                     ) {
                         Text(
                             "Logout",
                             modifier = Modifier.padding(vertical = 6.dp),
+                            color = Color.White
                         )
                     }
 
@@ -285,12 +287,13 @@ fun ProfileScreen(
                         onClick = {
                             authViewModel.deleteUser(onDeleted)
                         },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFff9e94)),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFEB1B00)),
                         shape = RoundedCornerShape(16.dp)
                     ) {
                         Text(
                             "Delete Account",
-                            modifier = Modifier.padding(vertical = 6.dp)
+                            modifier = Modifier.padding(vertical = 6.dp),
+                            color = Color.White
                         )
                     }
                 }

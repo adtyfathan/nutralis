@@ -32,15 +32,15 @@ fun BottomBar(
                 Icon(
                     painter = painterResource(id = R.drawable.home), // your image here
                     contentDescription = bottomScreens[0].label,
-                    tint = if (currentRoute.startsWith(bottomScreens[0].route)) Color(0xFF4CAF50) else Color.Gray
+                    tint = if (currentRoute.startsWith(bottomScreens[0].route)) Color(0xFF5AAD21) else Color.Gray
                 )
             },
             label = { Text(bottomScreens[0].label) },
             selected = currentRoute.startsWith(bottomScreens[0].route),
             onClick = { navigate(navController, bottomScreens[0].route) },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color(0xFF4CAF50), // green
-                selectedTextColor = Color(0xFF4CAF50),
+                selectedIconColor = Color(0xFF5AAD21), // green
+                selectedTextColor = Color(0xFF5AAD21),
                 unselectedIconColor = Color.Gray,
                 unselectedTextColor = Color.Gray,
                 indicatorColor = Color.Transparent // removes default highlight
@@ -54,15 +54,15 @@ fun BottomBar(
                 Icon(
                     painter = painterResource(id = R.drawable.history), // your image here
                     contentDescription = bottomScreens[2].label,
-                    tint = if (currentRoute.startsWith(bottomScreens[2].route)) Color(0xFF4CAF50) else Color.Gray
+                    tint = if (currentRoute.startsWith(bottomScreens[2].route)) Color(0xFF5AAD21) else Color.Gray
                 )
             },
             label = { Text(bottomScreens[2].label) },
             selected = currentRoute.startsWith(bottomScreens[2].route),
             onClick = { navigate(navController, bottomScreens[2].route) },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color(0xFF4CAF50), // green
-                selectedTextColor = Color(0xFF4CAF50),
+                selectedIconColor = Color(0xFF5AAD21), // green
+                selectedTextColor = Color(0xFF5AAD21),
                 unselectedIconColor = Color.Gray,
                 unselectedTextColor = Color.Gray,
                 indicatorColor = Color.Transparent // removes default highlight

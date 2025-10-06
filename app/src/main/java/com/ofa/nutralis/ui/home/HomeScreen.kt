@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
@@ -61,7 +62,7 @@ fun HomeScreen(
     LazyColumn (
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color(0xFFFFFFFF))
             .padding(
                 top = 24.dp,
                 start = 24.dp,
@@ -71,9 +72,9 @@ fun HomeScreen(
     ) {
         item {
             Text(
-                text = "Welcome to Nutralis",
-                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                color = Color(0xFF2E7D32)
+                text = "Welcome to Nutralis, user!",
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -144,9 +145,9 @@ fun HomeScreen(
             }
 
             Text(
-                text = "Quick Links",
+                text = "Quick Menu",
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = Color(0xFF2E7D32),
+                color = Color.Black,
                 modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
             )
 
@@ -155,20 +156,21 @@ fun HomeScreen(
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFa9ffbe))
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF78C841))
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xFFd2f8e5),
-                                    Color(0xFFa9ffbe)
-                                ),
-                                start = Offset(0f, 0f),
-                                end = Offset(1000f, 1000f)
-                            )
+                            color = Color(0xFF78C841)
+//                            brush = Brush.linearGradient(
+//                                colors = listOf(
+//                                    Color(0xFFd2f8e5),
+//                                    Color(0xFFa9ffbe)
+//                                ),
+//                                start = Offset(0f, 0f),
+//                                end = Offset(1000f, 1000f)
+//                            )
                         )
                         .padding(16.dp)
                 ){
@@ -189,8 +191,9 @@ fun HomeScreen(
                                     }
                                     .weight(1f),
                             ) {
-                                Image(
+                                Icon(
                                     painter = painterResource(R.drawable.search),
+                                    tint = Color.White,
                                     contentDescription = "Search",
                                     modifier = Modifier.size(48.dp)
                                 )
@@ -199,7 +202,7 @@ fun HomeScreen(
                                     text = "Search",
                                     style = MaterialTheme.typography.bodyMedium.copy(
                                         fontWeight = FontWeight.SemiBold,
-                                        color = Color.Black
+                                        color = Color.White
                                     )
                                 )
                             }
@@ -213,8 +216,9 @@ fun HomeScreen(
                                     }
                                     .weight(1f)
                             ) {
-                                Image(
+                                Icon(
                                     painter = painterResource(R.drawable.compare),
+                                    tint = Color.White,
                                     contentDescription = "Compare",
                                     modifier = Modifier.size(48.dp)
                                 )
@@ -223,7 +227,7 @@ fun HomeScreen(
                                     text = "Compare",
                                     style = MaterialTheme.typography.bodyMedium.copy(
                                         fontWeight = FontWeight.SemiBold,
-                                        color = Color.Black
+                                        color = Color.White
                                     )
                                 )
                             }
@@ -238,7 +242,7 @@ fun HomeScreen(
             Text(
                 text = "Explore by Category",
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = Color(0xFF2E7D32),
+                color = Color(0xFF78C841),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
@@ -262,12 +266,12 @@ fun HomeScreen(
                         },
                         shape = RoundedCornerShape(20.dp),
                         colors = FilterChipDefaults.filterChipColors(
-                            containerColor = if (isSelected) Color(0xFF2E7D32) else Color.White,
-                            labelColor = if (isSelected) Color.White else Color(0xFF2E7D32),
-                            selectedContainerColor = Color(0xFF2E7D32),
+                            containerColor = if (isSelected) Color(0xFF78C841) else Color.White,
+                            labelColor = if (isSelected) Color.White else Color(0xFF78C841),
+                            selectedContainerColor = Color(0xFF78C841),
                             selectedLabelColor = Color.White
                         ),
-                        border = if (isSelected) null else BorderStroke(1.dp, Color(0xFF2E7D32)),
+                        border = if (isSelected) null else BorderStroke(1.dp, Color(0xFF78C841)),
                         elevation = FilterChipDefaults.filterChipElevation(
                             elevation = if (isSelected) 4.dp else 0.dp
                         )
@@ -288,7 +292,7 @@ fun HomeScreen(
                             .padding(16.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator(color = Color(0xFFa9ffbe))
+                        CircularProgressIndicator(color = Color(0xFF78C841))
                     }
                 }
                 products.isNotEmpty() -> {
@@ -352,11 +356,11 @@ fun ProductCard(product: ProductItem, modifier: Modifier, onProductClick: (Strin
 
                 val grade = product.nutrition_grades?.lowercase()
                 val (gradeText, gradeColor) = when (grade) {
-                    "a" -> "A" to Color(0xFF4CAF50)
-                    "b" -> "B" to Color(0xFF8BC34A)
-                    "c" -> "C" to Color(0xFFFFC107)
-                    "d" -> "D" to Color(0xFFFF9800)
-                    "e" -> "E" to Color(0xFFF44336)
+                    "a" -> "A" to Color(0xFF53C406)
+                    "b" -> "B" to Color(0xFF78C841)
+                    "c" -> "C" to Color(0xFFF5D800)
+                    "d" -> "D" to Color(0xFFF5BB00)
+                    "e" -> "E" to Color(0xFFEB1B00)
                     else -> "-" to Color.Gray
                 }
 

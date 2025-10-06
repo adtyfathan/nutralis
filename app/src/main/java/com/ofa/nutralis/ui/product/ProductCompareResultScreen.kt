@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
@@ -44,9 +45,10 @@ import com.ofa.nutralis.R
 import com.ofa.nutralis.data.remote.Product
 
 // Color palette
-private val PrimaryGreen = Color(0xFF2E7D32)
+private val PrimaryGreen = Color(0xFF78C841)
 private val LightGreen = Color(0xFF4CAF50)
 private val VeryLightGreen = Color(0xFFE8F5E8)
+private val VeryLightYellow = Color(0xFFF8EDE0)
 private val SoftWhite = Color(0xFFFAFAFA)
 private val BorderGray = Color(0xFFE0E0E0)
 private val TextDark = Color(0xFF212121)
@@ -205,7 +207,7 @@ private fun CompareContent(product1: Product, product2: Product) {
 
         // Allergens Section
         item {
-            ComparisonSection(
+            AllergensSection(
                 title = "Allergens",
                 product1 = product1,
                 product2 = product2
@@ -252,6 +254,60 @@ private fun ComparisonSection(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = PrimaryGreen
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Product name header row
+            productNameHeaderRow(product1, product2)
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Content
+            content()
+        }
+    }
+}
+
+@Composable
+private fun AllergensSection(
+    title: String,
+    product1: Product,
+    product2: Product,
+    content: @Composable () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 2.dp,
+                color = Color(0xFFEBA100),
+                shape = RoundedCornerShape(16.dp)
+            ),
+        backgroundColor = Color.White,
+        elevation = 4.dp,
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp)
+        ) {
+            // Section header with green accent
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        VeryLightYellow,
+                        RoundedCornerShape(12.dp)
+                    )
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = title,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFFEBA100)
                 )
             }
 
@@ -438,9 +494,11 @@ private fun ComparisonValueContent(value: ComparisonValue, modifier: Modifier = 
         )
 
         is ComparisonValue.NutriScore -> Box(
+            contentAlignment = Alignment.Center,
             modifier = modifier
-                .clip(RoundedCornerShape(8.dp))
-                .background(getNutriScoreColor(value.grade))
+//                .clip(RoundedCornerShape(8.dp))
+                .size(36.dp)
+                .background(getNutriScoreColor(value.grade), shape = CircleShape)
                 .padding(horizontal = 12.dp, vertical = 4.dp)
         ) {
             Text(

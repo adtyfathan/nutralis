@@ -64,7 +64,7 @@ fun ProductCompareScreen(
     var showPopup by remember { mutableStateOf<Int?>(null) }
 
     // Color scheme
-    val primaryGreen = Color(0xFF2E7D32)
+    val primaryGreen = Color(0xFF78C841)
     val lightGreen = Color(0xFF4CAF50)
     val surfaceGreen = Color(0xFFF1F8E9)
     val backgroundColor = Color(0xFFFAFAFA)

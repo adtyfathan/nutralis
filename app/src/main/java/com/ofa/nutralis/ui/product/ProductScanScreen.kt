@@ -180,7 +180,7 @@ fun ProductScanScreen(onBarcodeScanned: (String) -> Unit) {
                         Icon(
                             painter = painterResource(id = R.drawable.info),
                             contentDescription = "How to use scanner",
-                            tint = if (showInfoDialog) Color(0xFF4CAF50) else Color.Black
+                            tint = if (showInfoDialog) Color(0xFF00FF37) else Color.Black
                         )
                     }
 
@@ -196,7 +196,7 @@ fun ProductScanScreen(onBarcodeScanned: (String) -> Unit) {
                         Icon(
                             painter = painterResource(id = R.drawable.flash),
                             contentDescription = "Toggle flash",
-                            tint = if (torchEnabled) Color(0xFF4CAF50) else Color.Black,
+                            tint = if (torchEnabled) Color(0xFF00FF37) else Color.Black,
                         )
                     }
 
@@ -229,9 +229,7 @@ fun ProductScanScreen(onBarcodeScanned: (String) -> Unit) {
                         .align(Alignment.Center)
                         .border(
                             width = 3.dp,
-                            brush = Brush.linearGradient(
-                                colors = listOf(primaryGreen, lightGreen)
-                            ),
+                            color = Color(0xFF00FF37),
                             shape = RoundedCornerShape(16.dp)
                         )
                         .background(

@@ -60,7 +60,7 @@ fun ScannedProductScreen(
                         .fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = Color(0xFFa9ffbe))
+                    CircularProgressIndicator(color = Color(0xFF78C841))
                 }
             }
             products.isEmpty() -> {

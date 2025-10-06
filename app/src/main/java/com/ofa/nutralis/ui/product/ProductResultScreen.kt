@@ -1,6 +1,7 @@
 package com.ofa.nutralis.ui.product
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -368,7 +369,13 @@ fun ProductResultScreen(
                     if (!product.allergens_hierarchy.isNullOrEmpty()) {
                         item {
                             Card(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .border(
+                                        width = 2.dp,
+                                        color = Color(0xFFEBA100),
+                                        shape = RoundedCornerShape(16.dp)
+                                    ),
                                 colors = CardDefaults.cardColors(containerColor = cardBackground),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                                 shape = RoundedCornerShape(16.dp)
@@ -379,7 +386,7 @@ fun ProductResultScreen(
                                     Text(
                                         "Allergen Warning",
                                         style = MaterialTheme.typography.headlineSmall,
-                                        color = Color(0xFFFF5722),
+                                        color = Color(0xFFEBA100),
                                         fontWeight = FontWeight.Bold
                                     )
                                     Spacer(modifier = Modifier.height(12.dp))
@@ -392,7 +399,7 @@ fun ProductResultScreen(
                                             Box(
                                                 modifier = Modifier
                                                     .size(6.dp)
-                                                    .background(Color(0xFFFF5722), RoundedCornerShape(3.dp))
+                                                    .background(Color(0xFFEBA100), RoundedCornerShape(3.dp))
                                             )
                                             Spacer(modifier = Modifier.width(12.dp))
                                             Text(

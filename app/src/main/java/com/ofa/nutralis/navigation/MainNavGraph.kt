@@ -1,5 +1,6 @@
 package com.ofa.nutralis.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -87,26 +88,37 @@ fun MainNavGraph(
                         .align(Alignment.TopCenter)
                         .offset(y = (-25).dp)
                 ) {
-                    FloatingActionButton(
-                        onClick = { navController.navigate(Screen.Scan.route) },
-                        shape = CircleShape,
-                        elevation = FloatingActionButtonDefaults.elevation(
-                            defaultElevation = 0.dp,
-                            pressedElevation = 0.dp,
-                            focusedElevation = 0.dp,
-                            hoveredElevation = 0.dp
-                        ),
-                        containerColor = Color(0xFF2E7D32),
-                        modifier = Modifier
-                            .size(64.dp)
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.size(72.dp)
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.scan),
-                            contentDescription = "Scan",
-                            tint = Color.White,
-                            modifier = Modifier.size(32.dp)
+                        Box(
+                            modifier = Modifier
+                                .size(72.dp)
+                                .background(Color.White, shape = CircleShape)
                         )
+                        FloatingActionButton(
+                            onClick = { navController.navigate(Screen.Scan.route) },
+                            shape = CircleShape,
+                            elevation = FloatingActionButtonDefaults.elevation(
+                                defaultElevation = 0.dp,
+                                pressedElevation = 0.dp,
+                                focusedElevation = 0.dp,
+                                hoveredElevation = 0.dp
+                            ),
+                            containerColor = Color(0xFF78C841),
+                            modifier = Modifier
+                                .size(64.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.scanner),
+                                contentDescription = "Scan",
+                                tint = Color.White,
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
                     }
+
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = "Scan",

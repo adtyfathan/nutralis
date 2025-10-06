@@ -1,4 +1,5 @@
 package com.ofa.nutralis.ui.product
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
@@ -80,7 +82,7 @@ import com.ofa.nutralis.R
             uiState.isLoading && uiState.products.isEmpty() -> {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
-                    color = Color(0xFFa9ffbe)
+                    color = Color(0xFF78C841)
                 )
             }
 
@@ -99,10 +101,23 @@ import com.ofa.nutralis.R
                         modifier = Modifier.align(Alignment.Center)
                     )
                 } else {
-                    Text(
-                        text = "No products found",
-                        modifier = Modifier.align(Alignment.Center)
-                    )
+                    Column(
+                        modifier = Modifier.align(Alignment.Center),
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.permission),
+                            contentDescription = "Empty State",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.size(120.dp).clip(CircleShape)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "No products found",
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                        )
+
+                    }
                 }
             }
 
@@ -164,23 +179,26 @@ import com.ofa.nutralis.R
                                     )
                                 }
 
+                                val grade = product.nutrition_grades?.lowercase()
+                                val (gradeText, gradeColor) = when (grade) {
+                                    "a" -> "A" to Color(0xFF53C406)
+                                    "b" -> "B" to Color(0xFF78C841)
+                                    "c" -> "C" to Color(0xFFF5D800)
+                                    "d" -> "D" to Color(0xFFF5BB00)
+                                    "e" -> "E" to Color(0xFFEB1B00)
+                                    else -> "-" to Color.Gray
+                                }
+
                                 Box(
+                                    contentAlignment = Alignment.Center,
                                     modifier = Modifier
-                                        .clip(RoundedCornerShape(8.dp))
-                                        .background(
-                                            when (product.nutrition_grades) {
-                                                "a" -> Color(0xFF4CAF50)
-                                                "b" -> Color(0xFF8BC34A)
-                                                "c" -> Color(0xFFFFC107)
-                                                "d" -> Color(0xFFFF9800)
-                                                "e" -> Color(0xFFF44336)
-                                                else -> Color.Gray
-                                            }
-                                        )
-                                        .padding(horizontal = 12.dp, vertical = 4.dp)
+//                                        .clip(RoundedCornerShape(8.dp))
+                                        .size(36.dp)
+                                        .background(gradeColor, shape = CircleShape)
+                                        .padding(horizontal = 12.dp, vertical = 12.dp)
                                 ) {
                                     Text(
-                                        text = if(product.nutrition_grades.isNullOrBlank() || product.nutrition_grades == "unknown") "-" else product.nutrition_grades,
+                                        text = gradeText,
                                         color = Color.White,
                                     )
                                 }

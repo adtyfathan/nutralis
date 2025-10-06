@@ -51,7 +51,7 @@ fun MainTopbar(
 
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color(0xFFa9ffbe),
+            containerColor = Color(0xFF78C841),
         ),
         title = {
             Box(
@@ -91,7 +91,7 @@ fun MainTopbar(
             ) {
                 if (state.isLoading) {
                     CircularProgressIndicator(
-                        color = Color(0xFFa9ffbe),
+                        color = Color(0xFF78C841),
                         strokeWidth = 2.dp,
                         modifier = Modifier.size(24.dp)
                     )
