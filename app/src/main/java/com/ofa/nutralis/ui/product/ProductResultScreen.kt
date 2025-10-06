@@ -199,9 +199,8 @@ fun ProductResultScreen(
                                 InfoRow("Barcode", barcode, textPrimary, textSecondary)
                                 InfoRow("Product Name", product.product_name, textPrimary, textSecondary)
                                 InfoRow("Nutrition Score", "${product.nutriscore_score?.toString()}/100", textPrimary, textSecondary)
-                                InfoRow("Product Type", product.product_type, textPrimary, textSecondary)
                                 InfoRow("Packaging", product.packaging, textPrimary, textSecondary)
-                                InfoRow("Distribution", product.countries, textPrimary, textSecondary)
+                                InfoRow("Manufacturer", product.countries, textPrimary, textSecondary)
                             }
                         }
                     }
@@ -277,14 +276,10 @@ fun ProductResultScreen(
                                         )
                                         Spacer(modifier = Modifier.height(16.dp))
 
-                                        InfoRow("Fat",
-                                            nutrientLevels?.fat, textPrimary, textSecondary)
-                                        InfoRow("Salt",
-                                            nutrientLevels?.salt, textPrimary, textSecondary)
-                                        InfoRow("Saturated Fat",
-                                            nutrientLevels?.`saturated-fat`, textPrimary, textSecondary)
-                                        InfoRow("Sugars",
-                                            nutrientLevels?.sugars, textPrimary, textSecondary)
+                                        NutrientLevelsRow("Fat",nutrientLevels?.fat)
+                                        NutrientLevelsRow("Salt",nutrientLevels?.salt)
+                                        NutrientLevelsRow("Saturated Fat",nutrientLevels?.`saturated-fat`)
+                                        NutrientLevelsRow("Sugars",nutrientLevels?.sugars)
                                     }
                                 }
                             }
@@ -424,36 +419,74 @@ private fun InfoRow(
     textPrimary: Color,
     textSecondary: Color
 ) {
-    if (value != null) {
-        Row(
+    val formattedValue = value?.substringAfter(":")
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            label,
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = textSecondary,
+            fontSize = 12.sp,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 6.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                label,
-                style = MaterialTheme.typography.bodySmall.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                color = textSecondary,
-                fontSize = 12.sp,
-                modifier = Modifier
-                    .weight(1f)
-                    .align(Alignment.Top) // left side
-            )
-            Text(
-                value,
-                style = MaterialTheme.typography.bodyMedium,
-                color = textPrimary,
-                fontWeight = FontWeight.Normal,
-                modifier = Modifier.weight(1f), // right side
-                textAlign = TextAlign.Start
-            )
-        }
+                .weight(1f)
+                .align(Alignment.Top) // left side
+        )
+        Text(
+            text = if (formattedValue.isNullOrEmpty()) "Unknown" else formattedValue,
+            style = MaterialTheme.typography.bodyMedium,
+            color = textPrimary,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.weight(1f), // right side
+            textAlign = TextAlign.Start
+        )
     }
 }
 
+@Composable
+private fun NutrientLevelsRow(
+    label: String,
+    value: String?,
+){
+    val nutrientLevelColor = when (value) {
+        "low" -> Color(0xFF1df705)
+        "moderate" -> Color(0xFFebf705)
+        "high" -> Color(0xFFf73105)
+        else -> Color(0xFF212121)
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            label,
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = Color(0xFF666666),
+            fontSize = 12.sp,
+            modifier = Modifier
+                .weight(1f)
+                .align(Alignment.Top) // left side
+        )
+        Text(
+            text = value ?: "Unknown",
+            style = MaterialTheme.typography.bodyMedium,
+            color = nutrientLevelColor,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.weight(1f), // right side
+            textAlign = TextAlign.Start
+        )
+    }
+}
 
 @Composable
 private fun NutrientRow(
